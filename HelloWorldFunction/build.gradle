@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+
+    implementation platform('software.amazon.awssdk:bom:2.20.157')
+
+    implementation('software.amazon.awssdk:sqs') {
+        exclude group: 'software.amazon.awssdk', module: 'netty-nio-client'
+        exclude group: 'software.amazon.awssdk', module: 'apache-client'
+    }
+    
+    implementation 'software.amazon.awssdk:url-connection-client'
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(AbstractArchiveTask).configureEach { // required for ensuring the libs zip has the same hash after each re-build
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+task packageLibs(type: Zip) { // package the project dependencies for SAM layer
+    into('java/lib') {
+        from configurations.runtimeClasspath
+    }
+    dirMode = 0755
+    fileMode = 0755
+}
+
+tasks.register('deleteLibFolder') { // delete libs (we already have all the libs in the layer)
+    doLast {
+        ant.delete dir: "${buildDir}/distributions/lambda-build/lib"
+    }
+}
+
+build.finalizedBy(deleteLibFolder)

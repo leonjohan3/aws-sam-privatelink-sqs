@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-private-link-sqs
+
+  Sample SAM Template for sam-private-link-sqs
+
+Globals:
+  Function:
+    Timeout: 14
+
+Resources:
+
+  MyLambdaVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      CidrBlock: "10.0.0.0/16"
+
+  MyLambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Lambda on SAM Security Group"
+      VpcId: !Ref MyLambdaVpc
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 443
+          ToPort: 443
+          IpProtocol: tcp
+
+  MyLambdaSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyLambdaVpc
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      MapPublicIpOnLaunch: false
+      CidrBlock: "10.0.0.0/24"
+
+  MyLambdaSqsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcEndpointType: Interface
+      SubnetIds:
+      - !Ref MyLambdaSubnetA
+      PrivateDnsEnabled: true
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.sqs
+      VpcId: !Ref MyLambdaVpc
+      SecurityGroupIds:
+      - !Ref MyVpcEndpointSecurityGroup
+
+  MyVpcEndpointSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Allow HTTPS traffic from the VPC to Vpc Endpoint'
+      VpcId: !Ref MyLambdaVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !GetAtt MyLambdaVpc.CidrBlock
+          
+  MyQueueInlinePolicy:
+    Type: AWS::SQS::QueueInlinePolicy
+    Properties: 
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action:
+          - SQS:SendMessage
+          Effect: Allow
+          Resource: !GetAtt MyQueue.Arn
+          Principal:
+            AWS: !GetAtt LambdaRole.Arn
+        
+      Queue: !Ref MyQueue
+  
+  MyQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "SampleQueueForSamPrivateLinkSqsFunction"
+      MessageRetentionPeriod: 300
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: LambdaSQSSendMessage
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action: SQS:SendMessage
+            Resource: !GetAtt MyQueue.Arn
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+  MyLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: sam-private-link-sqs
+      Description: Dependencies for sam-private-link-sqs
+      ContentUri: HelloWorldFunction
+      RetentionPolicy: Delete
+      CompatibleRuntimes:
+      - java17
+      CompatibleArchitectures:
+      - x86_64
+    Metadata:
+      BuildMethod: makefile
+      BuildArchitecture: x86_64
+      
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Role: !GetAtt LambdaRole.Arn
+      CodeUri: HelloWorldFunction
+      Handler: helloworld.App::handleRequest
+      Runtime: java17
+      Architectures:
+      - x86_64
+      MemorySize: 512
+      VpcConfig:
+        SecurityGroupIds:
+        - !Ref MyLambdaSecurityGroup
+        SubnetIds:
+        - !Ref MyLambdaSubnetA
+
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          TZ: Australia/Melbourne
+          QUEUE_URL: !Ref MyQueue
+          JAVA_TOOL_OPTIONS: -Dorg.slf4j.simpleLogger.defaultLogLevel=debug
+
+      Layers:
+      - !Ref MyLayer
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+
+Outputs:
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"

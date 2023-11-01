@@ -1,0 +1,152 @@
+
+		Managed S3 bucket: aws-sam-cli-managed-default-samclisourcebucket-12sh2mcr75b0u
+		A different default S3 bucket can be set in samconfig.toml
+		Or by specifying --s3-bucket explicitly.
+	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  262144 / 4399288  (5.96%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  524288 / 4399288  (11.92%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  786432 / 4399288  (17.88%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  1048576 / 4399288  (23.84%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  1310720 / 4399288  (29.79%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  1572864 / 4399288  (35.75%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  1835008 / 4399288  (41.71%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  2097152 / 4399288  (47.67%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  2359296 / 4399288  (53.63%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  2621440 / 4399288  (59.59%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  2883584 / 4399288  (65.55%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  3145728 / 4399288  (71.51%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  3407872 / 4399288  (77.46%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  3670016 / 4399288  (83.42%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  3932160 / 4399288  (89.38%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  4194304 / 4399288  (95.34%)	Uploading to sam-private-link-sqs/c5d12f48dc09f8705531e893eb6b3e2e  4399288 / 4399288  (100.00%)
+	Uploading to sam-private-link-sqs/3fa8d665858b6456ba310c35902878a2  2114 / 2114  (100.00%)
+
+	Deploying with following values
+	===============================
+	Stack name                   : sam-private-link-sqs
+	Region                       : ap-southeast-2
+	Confirm changeset            : False
+	Disable rollback             : False
+	Deployment s3 bucket         : aws-sam-cli-managed-default-samclisourcebucket-12sh2mcr75b0u
+	Capabilities                 : ["CAPABILITY_IAM"]
+	Parameter overrides          : {}
+	Signing Profiles             : {}
+
+Initiating deployment
+=====================
+
+	Uploading to sam-private-link-sqs/19b31fa9945df1e069adf6cc0ba47bbb.template  4975 / 4975  (100.00%)
+
+
+Waiting for changeset to be created..
+
+CloudFormation stack changeset
+-------------------------------------------------------------------------------------------------
+Operation                LogicalResourceId        ResourceType             Replacement            
+-------------------------------------------------------------------------------------------------
++ Add                    HelloWorldFunctionHell   AWS::Lambda::Permissio   N/A                    
+                         oWorldPermissionProd     n                                               
++ Add                    HelloWorldFunction       AWS::Lambda::Function    N/A                    
++ Add                    LambdaRole               AWS::IAM::Role           N/A                    
++ Add                    MyLambdaSecurityGroup    AWS::EC2::SecurityGrou   N/A                    
+                                                  p                                               
++ Add                    MyLambdaSqsEndpoint      AWS::EC2::VPCEndpoint    N/A                    
++ Add                    MyLambdaSubnetA          AWS::EC2::Subnet         N/A                    
++ Add                    MyLambdaVpc              AWS::EC2::VPC            N/A                    
++ Add                    MyLayere1df0ca27a        AWS::Lambda::LayerVers   N/A                    
+                                                  ion                                             
++ Add                    MyQueueInlinePolicy      AWS::SQS::QueueInlineP   N/A                    
+                                                  olicy                                           
++ Add                    MyQueue                  AWS::SQS::Queue          N/A                    
++ Add                    MyVpcEndpointSecurityG   AWS::EC2::SecurityGrou   N/A                    
+                         roup                     p                                               
++ Add                    ServerlessRestApiDeplo   AWS::ApiGateway::Deplo   N/A                    
+                         yment47fc2d5f9d          yment                                           
++ Add                    ServerlessRestApiProdS   AWS::ApiGateway::Stage   N/A                    
+                         tage                                                                     
++ Add                    ServerlessRestApi        AWS::ApiGateway::RestA   N/A                    
+                                                  pi                                              
+-------------------------------------------------------------------------------------------------
+
+
+Changeset created successfully. arn:aws:cloudformation:ap-southeast-2:988599363028:changeSet/samcli-deploy1696284630/3a4bff94-9e46-4e7f-b0d0-44c4a940d4c0
+
+
+2023-10-03 09:10:37 - Waiting for stack create/update to complete
+
+CloudFormation events from stack operations (refresh every 5.0 seconds)
+-------------------------------------------------------------------------------------------------
+ResourceStatus           ResourceType             LogicalResourceId        ResourceStatusReason   
+-------------------------------------------------------------------------------------------------
+CREATE_IN_PROGRESS       AWS::EC2::VPC            MyLambdaVpc              -                      
+CREATE_IN_PROGRESS       AWS::Lambda::LayerVers   MyLayere1df0ca27a        -                      
+                         ion                                                                      
+CREATE_IN_PROGRESS       AWS::SQS::Queue          MyQueue                  -                      
+CREATE_IN_PROGRESS       AWS::SQS::Queue          MyQueue                  Resource creation      
+                                                                           Initiated              
+CREATE_IN_PROGRESS       AWS::EC2::VPC            MyLambdaVpc              Resource creation      
+                                                                           Initiated              
+CREATE_COMPLETE          AWS::SQS::Queue          MyQueue                  -                      
+CREATE_IN_PROGRESS       AWS::IAM::Role           LambdaRole               -                      
+CREATE_IN_PROGRESS       AWS::IAM::Role           LambdaRole               Resource creation      
+                                                                           Initiated              
+CREATE_IN_PROGRESS       AWS::Lambda::LayerVers   MyLayere1df0ca27a        Resource creation      
+                         ion                                               Initiated              
+CREATE_COMPLETE          AWS::Lambda::LayerVers   MyLayere1df0ca27a        -                      
+                         ion                                                                      
+CREATE_COMPLETE          AWS::EC2::VPC            MyLambdaVpc              -                      
+CREATE_IN_PROGRESS       AWS::EC2::SecurityGrou   MyLambdaSecurityGroup    -                      
+                         p                                                                        
+CREATE_IN_PROGRESS       AWS::EC2::Subnet         MyLambdaSubnetA          -                      
+CREATE_IN_PROGRESS       AWS::EC2::SecurityGrou   MyVpcEndpointSecurityG   -                      
+                         p                        roup                                            
+CREATE_IN_PROGRESS       AWS::EC2::Subnet         MyLambdaSubnetA          Resource creation      
+                                                                           Initiated              
+CREATE_COMPLETE          AWS::EC2::Subnet         MyLambdaSubnetA          -                      
+CREATE_IN_PROGRESS       AWS::EC2::SecurityGrou   MyLambdaSecurityGroup    Resource creation      
+                         p                                                 Initiated              
+CREATE_IN_PROGRESS       AWS::EC2::SecurityGrou   MyVpcEndpointSecurityG   Resource creation      
+                         p                        roup                     Initiated              
+CREATE_COMPLETE          AWS::EC2::SecurityGrou   MyLambdaSecurityGroup    -                      
+                         p                                                                        
+CREATE_COMPLETE          AWS::EC2::SecurityGrou   MyVpcEndpointSecurityG   -                      
+                         p                        roup                                            
+CREATE_IN_PROGRESS       AWS::EC2::VPCEndpoint    MyLambdaSqsEndpoint      -                      
+CREATE_IN_PROGRESS       AWS::EC2::VPCEndpoint    MyLambdaSqsEndpoint      Resource creation      
+                                                                           Initiated              
+CREATE_COMPLETE          AWS::IAM::Role           LambdaRole               -                      
+CREATE_IN_PROGRESS       AWS::SQS::QueueInlineP   MyQueueInlinePolicy      -                      
+                         olicy                                                                    
+CREATE_IN_PROGRESS       AWS::Lambda::Function    HelloWorldFunction       -                      
+CREATE_IN_PROGRESS       AWS::SQS::QueueInlineP   MyQueueInlinePolicy      Resource creation      
+                         olicy                                             Initiated              
+CREATE_IN_PROGRESS       AWS::Lambda::Function    HelloWorldFunction       Resource creation      
+                                                                           Initiated              
+CREATE_COMPLETE          AWS::SQS::QueueInlineP   MyQueueInlinePolicy      -                      
+                         olicy                                                                    
+CREATE_COMPLETE          AWS::EC2::VPCEndpoint    MyLambdaSqsEndpoint      -                      
+CREATE_COMPLETE          AWS::Lambda::Function    HelloWorldFunction       -                      
+CREATE_IN_PROGRESS       AWS::ApiGateway::RestA   ServerlessRestApi        -                      
+                         pi                                                                       
+CREATE_IN_PROGRESS       AWS::ApiGateway::RestA   ServerlessRestApi        Resource creation      
+                         pi                                                Initiated              
+CREATE_COMPLETE          AWS::ApiGateway::RestA   ServerlessRestApi        -                      
+                         pi                                                                       
+CREATE_IN_PROGRESS       AWS::ApiGateway::Deplo   ServerlessRestApiDeplo   -                      
+                         yment                    yment47fc2d5f9d                                 
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   HelloWorldFunctionHell   -                      
+                         n                        oWorldPermissionProd                            
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   HelloWorldFunctionHell   Resource creation      
+                         n                        oWorldPermissionProd     Initiated              
+CREATE_COMPLETE          AWS::Lambda::Permissio   HelloWorldFunctionHell   -                      
+                         n                        oWorldPermissionProd                            
+CREATE_IN_PROGRESS       AWS::ApiGateway::Deplo   ServerlessRestApiDeplo   Resource creation      
+                         yment                    yment47fc2d5f9d          Initiated              
+CREATE_COMPLETE          AWS::ApiGateway::Deplo   ServerlessRestApiDeplo   -                      
+                         yment                    yment47fc2d5f9d                                 
+CREATE_IN_PROGRESS       AWS::ApiGateway::Stage   ServerlessRestApiProdS   -                      
+                                                  tage                                            
+CREATE_IN_PROGRESS       AWS::ApiGateway::Stage   ServerlessRestApiProdS   Resource creation      
+                                                  tage                     Initiated              
+CREATE_COMPLETE          AWS::ApiGateway::Stage   ServerlessRestApiProdS   -                      
+                                                  tage                                            
+CREATE_COMPLETE          AWS::CloudFormation::S   sam-private-link-sqs     -                      
+                         tack                                                                     
+-------------------------------------------------------------------------------------------------
+
+CloudFormation outputs from deployed stack
+-------------------------------------------------------------------------------------------------
+Outputs                                                                                         
+-------------------------------------------------------------------------------------------------
+Key                 HelloWorldApi                                                               
+Description         API Gateway endpoint URL for Prod stage for Hello World function            
+Value               https://qwn9zgg9uh.execute-api.ap-southeast-2.amazonaws.com/Prod/hello/     
+-------------------------------------------------------------------------------------------------
+
+
+Successfully created/updated stack - sam-private-link-sqs in ap-southeast-2
+
